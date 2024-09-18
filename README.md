@@ -29,11 +29,11 @@ Table of Contents
 
 기존 객체 탐지 시스템(Faster R-CNN)은 bounding box 생성 후 픽셀 또는 특징들을 리샘플링하여 객체를 탐지합니다.
 
-Faster R-CNN
+  Faster R-CNN
 
-RoI Pooling(Region of Interest Pooling)
+    RoI Pooling(Region of Interest Pooling)
 
-잠재적으로 객체가 있을 수 있는 `관심 영역`ROI (Region of Interest)을 RPN (Region Proposal Network)로 bounding box을 예측 → `관심 영역`을 동일한 지정 크기로 변환하기 위해 해당 영역을 샘플링하는 과정 ROI Pooling 수행 → ROI Pooling으로 ROI bounding box에서 픽셀 및 특징을 다시 샘플링한 후, 분류기와 네트워크에 전달하여 최종 결과를 얻음
+    잠재적으로 객체가 있을 수 있는 `관심 영역`ROI (Region of Interest)을 RPN (Region Proposal Network)로 bounding box을 예측 → `관심 영역`을 동일한 지정 크기로 변환하기 위해 해당 영역을 샘플링하는 과정 ROI Pooling 수행 → ROI Pooling으로 ROI bounding box에서 픽셀 및 특징을 다시 샘플링한 후, 분류기와 네트워크에 전달하여 최종 결과를 얻음
 
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/70040e56-fffb-496d-a29c-ea90949e8fbd/image.png)
 
@@ -52,9 +52,11 @@ SSD 모델은 YOLO v1모델과 같게 1-stage detector로 하나의 통합된 �
 SSD의 다양한 feature map은 Early Network와 Auxiliary Layers으로 구성됩니다.
 
 **Early Network**
+
 Base Network로 부르며, VGG16 백본에서 중간 부분을 사용하여 (con4_3) 다양한 특징 맵을 생성하여 추후에 제일 작은 객체를 탐지 및 클래스 점수(카테고리 점수) 예측하는데 사용됩니다.
 
 **Auxiliary Network**
+
 Auxiliary Network에서는 Base Network에서 나온 후 (con7_3) 여러 단계로 3X3 컨볼루션을 진행하여 점차 크기가 작아진 feature map을 생성하여, 각 층 별로 더 큰 객체를 탐지 및 클래스 점수(카테고리 점수) 예측하는 데 사용됩니다.
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/55a0c604-5f3c-4744-8963-e9886292fdbf/image.png)
 
