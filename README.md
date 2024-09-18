@@ -31,9 +31,9 @@ Table of Contents
 
   Faster R-CNN
 
-    RoI Pooling(Region of Interest Pooling)
+  RoI Pooling(Region of Interest Pooling)
 
-    잠재적으로 객체가 있을 수 있는 `관심 영역`ROI (Region of Interest)을 RPN (Region Proposal Network)로 bounding box을 예측 → `관심 영역`을 동일한 지정 크기로 변환하기 위해 해당 영역을 샘플링하는 과정 ROI Pooling 수행 → ROI Pooling으로 ROI bounding box에서 픽셀 및 특징을 다시 샘플링한 후, 분류기와 네트워크에 전달하여 최종 결과를 얻음
+  잠재적으로 객체가 있을 수 있는 `관심 영역`ROI (Region of Interest)을 RPN (Region Proposal Network)로 bounding box을 예측 → `관심 영역`을 동일한 지정 크기로 변환하기 위해 해당 영역을 샘플링하는 과정 ROI Pooling 수행 → ROI Pooling으로 ROI bounding box에서 픽셀 및 특징을 다시 샘플링한 후, 분류기와 네트워크에 전달하여 최종 결과를 얻음
 
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/70040e56-fffb-496d-a29c-ea90949e8fbd/image.png)
 
@@ -48,6 +48,7 @@ SSD는 이러한 과정을 제거하여 더 빠른 속도로 실시간 탐지가
 
 ### 1) Multiscale feature maps
 SSD 모델은 YOLO v1모델과 같게 1-stage detector로 하나의 통합된 네트워크로 detection을 수행합니다. YOLO v1 같은 경우 7X7X30 크기의 feature map만 사용했습니다. 단일한 scale의 feature map을 사용할 경우, 다양한 크기의 객체를 포착하기 여렵다는 단점이 있습니다. 그래서 SSD는 다양한 scale의 feature map을 사용하여 detection을 수행한다는 점이 YOLO v1 과 차이점을 가지고 있습니다.
+
 
 SSD의 다양한 feature map은 Early Network와 Auxiliary Layers으로 구성됩니다.
 
