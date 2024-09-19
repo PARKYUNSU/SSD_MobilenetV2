@@ -68,7 +68,7 @@ auxiliary network 부분은 conv8_2, conv9_2, conv10_2, conv11_2 layer에서 10X
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/b2bbc206-9b0f-4faa-a538-49d46746dc69/image.png)
 
 ### 2) Convolutional predictors for detection / Default boxes and aspect ratios
-SSD는 각 각 6개층(Base+Auxiliart Network)의 feature map에서 3X3 사이즈의 커널로 p개의 값을 추출합니다. 
+SSD는 각 각 6개층(Base+Auxiliay Network)의 feature map에서 3X3 사이즈의 커널로 p개의 값을 추출합니다. 
 **p = c + 4**
 각 feature map들은 다양한 aspect ratios(직사각형의 가로세로 비율: 1, 2, 0.5, 0.333)로 k개의 default bounding box를 생성하고, c 개의 클래스 점수와 default bounding box의 좌표 4개의 값을 계산합니다.
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/85ac1005-6f85-40f6-9993-bc08858a3449/image.png)
