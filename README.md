@@ -33,7 +33,7 @@ Table of Contents
 
   RoI Pooling(Region of Interest Pooling)
 
-  잠재적으로 객체가 있을 수 있는 `관심 영역`ROI (Region of Interest)을 RPN (Region Proposal Network)로 bounding box을 예측 → `관심 영역`을 동일한 지정 크기로 변환하기 위해 해당 영역을 샘플링하는 과정 ROI Pooling 수행 → ROI Pooling으로 ROI bounding box에서 픽셀 및 특징을 다시 샘플링한 후, 분류기와 네트워크에 전달하여 최종 결과를 얻음
+  리샘플링하는 예시로, Faster R-CNN을 보면 잠재적으로 객체가 있을 수 있는 `관심 영역`ROI (Region of Interest)을 RPN (Region Proposal Network)로 bounding box을 예측 → `관심 영역`을 동일한 지정 크기로 변환하기 위해 해당 영역을 샘플링하는 과정 ROI Pooling 수행 → ROI Pooling으로 ROI bounding box에서 픽셀 및 특징을 다시 샘플링한 후, 분류기와 네트워크에 전달하여 최종 결과를 얻음
 
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/70040e56-fffb-496d-a29c-ea90949e8fbd/image.png)
 
