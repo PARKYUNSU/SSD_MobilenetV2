@@ -83,11 +83,17 @@ SSD의 학습 목표는, 위에서 설명한 다양한 Box들인 MultiBox에서 
 
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/43eda36c-7979-4d54-a69a-612dedd5f1f3/image.png)
  L(x, c, l, g): 전체 손실
+ 
  x: 각 Default box가 어떤 클래스와 매칭되는지 나타내는 값
+ 
  c: 클래스 예측 값
+ 
  l: Localization(예측된 박스 위치 정보)
+ 
  g: Ground truth(정답 박스)
+ 
  α: Localization 가중치 (L_conf 와 L_loc 비율을 조정하는 역할을 합니다)
+ 
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/825afcf2-86ea-44ea-b148-eeab5ca8ec7d/image.png)
 예측된 바운딩 박스와 실제 바운딩 박스의 좌표 간의 차이를 계산합니다. 이때 중심 좌표 **(cx, cy)**와 크기 **(w, h)**의 차이를 각각 정규화하고, 이 차이에 대해 Smooth L1 손실을 적용하여 계산합니다.
 
