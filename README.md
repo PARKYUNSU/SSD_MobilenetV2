@@ -108,7 +108,6 @@ i ∈ Neg는 음성(negative) 샘플, 즉 객체와 매칭되지 않은 디폴�
 
 SSD 모델에서 **Default Boxes** 의 **Aspect ratio** 로 각 feature map에서 다양한 크기와 비율로 설정된 default box를 통해, 모델은 여러 크기의 객체를 적응하여 탐지할 수 있습니다.
 
-Scales
 SSD는 각 feature map의 크기에 맞춰 작은 객체부터 큰 객체까지 모두 탐지합니다. 첫 번째 feature map에 대해 가장 작은 스케일을, 마지막 feature map에 대해 가장 큰 스케일을 적용하빈다.
 
 예를 들어, 첫 번째 feature map(conv4_3)의 default box는 상대적으로 작은 스케일을 가지며, 마지막 feature map(conv11_2)의 default box는 큰 스케일을 가집니다.
@@ -124,7 +123,7 @@ Aspect Ratios
 
 SSD는 aspect ratio로 1:1, 2:1, 3:1, 1:2, 1:3. 이를 통해 정사각형과 직사각형 등의 다양한 형태의 객체를 탐지할 수 있습니다.
 
-예를 들어, 1:1 aspect ratio는 정사각형 모양의 박스를 생성하고, 2:1 또는 1:2와 같은 비율은 직사각형 모양의 박스를 생성합니다. 이러한 다양한 종횡비를 통해 SSD는 여러 모양의 객체에 대응할 수 있습니다.
+1:1 aspect ratio는 정사각형 모양의 박스를 생성하고, 2:1 또는 1:2와 같은 비율은 직사각형 모양의 박스를 생성합니다.
 
 
 
