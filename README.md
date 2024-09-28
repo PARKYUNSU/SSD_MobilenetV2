@@ -115,9 +115,9 @@ SSD는 작은 객체부터 큰 객체까지 모두 탐지할 수 있도록 각 f
 
 스케일 값은 각 feature map마다 특정 비율로 설정되며, 이를 통해 다양한 크기의 객체를 탐지할 수 있습니다. SSD 논문에서는 스케일을 아래와 같이 설정합니다:
 
-scss
-코드 복사
-s_k = s_min + (s_max - s_min) / (m - 1) * (k - 1)
+
+The scale is calculated as $s_k = s_{\text{min}} + \frac{(s_{\text{max}} - s_{\text{min}})}{(m - 1)} \cdot (k - 1)$.
+
 여기서,
 
 s_min과 s_max는 최소 및 최대 스케일 값,
