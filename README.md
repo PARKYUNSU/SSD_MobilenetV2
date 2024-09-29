@@ -146,18 +146,17 @@ ex) conv4_3 피처 맵:
  
 각 위치에서 prior box의 크기는 다음과 같이 계산됩니다.
 
-aspect ratio 1:
-width = 0.1 * sqrt(1) = 0.1
-height = 0.1 / sqrt(1) = 0.1
+1. **Aspect ratio 1**:
+   - width: $0.1 \times \sqrt{1} = 0.1$
+   - height: $\frac{0.1}{\sqrt{1}} = 0.1$
 
-aspect ratio 2:
-width = 0.1 * sqrt(2) ≈ 0.1414
-height = 0.1 / sqrt(2) ≈ 0.0707
+2. **Aspect ratio 2**:
+   - width: $0.1 \times \sqrt{2} \approx 0.1414$
+   - height: $\frac{0.1}{\sqrt{2}} \approx 0.0707$
 
-aspect ratio 0.5:
-width = 0.1 * sqrt(0.5) ≈ 0.0707
-height = 0.1 / sqrt(0.5) ≈ 0.1414
-
+3. **Aspect ratio 0.5**:
+   - width: $0.1 \times \sqrt{0.5} \approx 0.0707$
+   - height: $\frac{0.1}{\sqrt{0.5}} \approx 0.1414$
 
 
 #### 2) Object scale
