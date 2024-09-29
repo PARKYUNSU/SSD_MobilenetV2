@@ -35,43 +35,6 @@ SSD 모델의 백본으로 사용하기 위해서 4가지 방법으로 모델 �
 Bottleneck 7번과 마지막 출력인 Linear Block을 사용하여 Base Network로 설정
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/a755b2a6-a15c-4f70-a27c-99b71360381a/image.png)
 
-```python
-class MobileNetV2Base(nn.Module):
-    def __init__(self):
-        super(MobileNetV2Base, self).__init__()
-        # First convolution layer
-        self.first_conv = nn.Sequential(
-            nn.Conv2d(3, 32, 3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU6(inplace=True)
-        )
-
-        # Bottleneck layers (inverted residual blocks)
-        self.bottlenecks = nn.Sequential(
-            self._make_stage(32, 16, t=1, n=1),
-            self._make_stage(16, 24, t=6, n=2, stride=2),
-            self._make_stage(24, 32, t=6, n=3, stride=2),
-            self._make_stage(32, 64, t=6, n=4, stride=2),
-            self._make_stage(64, 96, t=6, n=3),
-            self._make_stage(96, 160, t=6, n=3, stride=2),
-            self._make_stage(160, 320, t=6, n=1)
-        )
-
-        # Last convolution layer in MobileNetV2
-        self.last_conv = nn.Sequential(
-            nn.Conv2d(320, 1280, 1, bias=False),
-            nn.BatchNorm2d(1280),
-            nn.ReLU6(inplace=True)
-        )
-
-        # Additional layers for SSD (conv6, conv7)
-        self.conv6 = nn.Conv2d(1280, 1024, kernel_size=3, padding=6, dilation=6)  # atrous convolution
-        self.conv7 = nn.Conv2d(1024, 1024, kernel_size=1)
-
-        # Adjust conv4_3 feature map to have 512 channels
-        self.conv4_3_adjust = nn.Conv2d(320, 512, kernel_size=1)
-
-```
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/a3a4cdc2-3a9c-4cde-9f7e-aba9b166a510/image.png)
 
 Result
@@ -85,44 +48,6 @@ Class scores output shape: torch.Size([1, 1212, 21])
 Bottleneck 3번과 마지막 출력인 Linear block을 사용하여 Base Network로 설정
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/f9cefa8c-01cb-407a-8df3-d415c3b5247d/image.png)
 
-```python
-class MobileNetV2Base(nn.Module):
-    def __init__(self):
-        super(MobileNetV2Base, self).__init__()
-
-        # First convolution layer
-        self.first_conv = nn.Sequential(
-            nn.Conv2d(3, 32, 3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU6(inplace=True)
-        )
-
-        # Bottleneck layers (inverted residual blocks)
-        self.bottlenecks = nn.Sequential(
-            self._make_stage(32, 16, t=1, n=1),
-            self._make_stage(16, 24, t=6, n=2, stride=2),
-            self._make_stage(24, 32, t=6, n=3, stride=2),
-            self._make_stage(32, 64, t=6, n=4, stride=2),
-            self._make_stage(64, 96, t=6, n=3),
-            self._make_stage(96, 160, t=6, n=3, stride=2),
-            self._make_stage(160, 320, t=6, n=1)
-        )
-
-        # Last convolution layer in MobileNetV2
-        self.last_conv = nn.Sequential(
-            nn.Conv2d(320, 1280, 1, bias=False),
-            nn.BatchNorm2d(1280),
-            nn.ReLU6(inplace=True)
-        )
-
-        # Additional layers for SSD (conv6, conv7)
-        self.conv6 = nn.Conv2d(1280, 1024, kernel_size=3, padding=6, dilation=6)  # atrous convolution
-        self.conv7 = nn.Conv2d(1024, 1024, kernel_size=1)
-
-        # Adjust conv4_3 feature map to have 512 channels
-        self.conv4_3_adjust = nn.Conv2d(32, 512, kernel_size=1)
-
-```
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/7bcb3635-a58f-40da-af8d-030ff23efc36/image.png)
 
 Result
@@ -135,39 +60,7 @@ Class scores output shape: torch.Size([1, 6600, 21])
 ### Experiment 3.
 #### 실험 3
 기존 MobilenetV2의 모델 구조를 개선하여 conv4_3, conv7 Base Network 설정
-```python
-class MobileNetV2Base(nn.Module):
-    def __init__(self):
-        super(MobileNetV2Base, self).__init__()
 
-        # First convolution layer
-        self.first_conv = nn.Sequential(
-            nn.Conv2d(3, 32, 3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU6(inplace=True)
-        )
-
-        # Bottleneck layers
-        self.bottlenecks = nn.Sequential(
-            self._make_stage(32, 24, t=1, n=1),   # Bottleneck 1: 16 -> 24
-            self._make_stage(24, 32, t=6, n=2, stride=2),  # Bottleneck 2: 24 -> 32
-            self._make_stage(32, 64, t=6, n=3, stride=2),  # Bottleneck 3: 32 -> 64
-            self._make_stage(64, 128, t=6, n=4, stride=2),  # Bottleneck 4: 64 -> 128
-            self._make_stage(128, 256, t=6, n=3),  # Bottleneck 5: 128 -> 256
-            self._make_stage(256, 512, t=6, n=3, stride=1),  # Bottleneck 6: 256 -> 512
-            self._make_stage(512, 1024, t=6, n=1)  # Bottleneck 7: 512 -> 1024
-        )
-
-    def forward(self, image):
-        out = self.first_conv(image) # ([1, 32, 150, 150])
-        out = self.bottlenecks[:6](out) #([1, 512, 19, 19])        
-        conv4_3_feats = out # ([1, 512, 19, 19])
-        
-        out = self.bottlenecks[6:](out) # Rest of Bottleneck [1, 1024, 19, 19])
-        conv7_feats = out # [1, 1024, 19, 19])
-        
-        return conv4_3_feats, conv7_feats
-```
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/b35364e9-0971-43d6-95b4-4ae20a40f939/image.png)
 Result
 Total prior boxes: 4400
@@ -178,43 +71,7 @@ Class scores output shape: torch.Size([1, 4400, 21])
 #### Experiment 4.
 #### 실험 4
 실험 3과 동일한 구조이지만, 추후 iphone ios(Real Time Object Detection) App을 만들떄 모델의 Bottleneck 구조를 하나로 설정하게 되면, conv4_3, conv7을 각각 뽑아낼 수 없기에 **nn.Sequential()** 로 묶어주기
-```python
-class MobileNetV2Base(nn.Module):
-    def __init__(self):
-        super(MobileNetV2Base, self).__init__()
 
-        # First convolution layer
-        self.first_conv = nn.Sequential(
-            nn.Conv2d(3, 32, 3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU6(inplace=True)
-        )
-
-        # Bottleneck layers with gradual channel increase
-        self.bottleneck1_6 = nn.Sequential(
-            self._make_stage(32, 24, t=1, n=1),   # Bottleneck 1: 32 -> 24
-            self._make_stage(24, 32, t=6, n=2, stride=2),  # Bottleneck 2: 24 -> 32
-            self._make_stage(32, 64, t=6, n=3, stride=2),  # Bottleneck 3: 32 -> 64
-            self._make_stage(64, 128, t=6, n=4, stride=2),  # Bottleneck 4: 64 -> 128
-            self._make_stage(128, 256, t=6, n=3),  # Bottleneck 5: 128 -> 256
-            self._make_stage(256, 512, t=6, n=3, stride=1)  # Bottleneck 6: 256 -> 512
-        )
-        
-        self.bottleneck7_rest = nn.Sequential(
-            self._make_stage(512, 1024, t=6, n=1)  # Bottleneck 7: 512 -> 1024
-        )
-
-    def forward(self, image):
-        out = self.first_conv(image) # ([1, 32, 150, 150])
-        out = self.bottleneck1_6(out) #([1, 512, 19, 19])
-        conv4_3_feats = out # ([1, 512, 19, 19])
-        
-        out = self.bottleneck7_rest(out) # Rest of Bottleneck ([1, 1024, 19, 19])
-        conv7_feats = out # [1, 1024, 19, 19])
-        
-        return conv4_3_feats, conv7_feats
-
-```
 Result
 Total prior boxes: 4400
 Localization output shape: torch.Size([1, 4400, 4])
