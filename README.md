@@ -171,11 +171,17 @@ ex) conv4_3 피처 맵:
 위 그림은 같은 aspect ratio를 가지진만 다른 Scale로  다른 Box 가 나오는 예시
 
 'conv4_3': 0.1
+
 'conv7': 0.2
+
 'conv8_2': 0.375
+
 'conv9_2': 0.55
+
 'conv10_2': 0.725
+
 'conv11_2': 0.9
+
 <img src="https://velog.velcdn.com/images/qkrdbstn24/post/9f320e6b-235a-4810-b2e1-109e190308e3/image.png" width="400"/>
 $m$ : 몇 개의 feature map (con7 ~ conv11_2  5개)
 $s_k$ : scalre of $k^{th}$ layer
