@@ -202,5 +202,6 @@ n_boxes 갯수 및 feature map 크기
 4. 'conv9_2': 6 (5 x 5) = 5 x 5 x 6 = 150 -> 더 큰 객체 탐지
 5. 'conv10_2': 4 (3 x 3) = 3 x 3 x 4 = 36 -> 큰 객체 탐지
 6. 'conv11_2': 4 (1 x 1) = 1 x 1 x 4 = 4 -> 매우 큰 객체 탐지
+
 Total prior box = 8732
 
