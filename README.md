@@ -83,17 +83,11 @@ SSD의 학습 목표는, 위에서 설명한 다양한 Box들인 MultiBox에서 
 
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/43eda36c-7979-4d54-a69a-612dedd5f1f3/image.png)
  L(x, c, l, g): 전체 손실
- 
  x: 각 Default box가 어떤 클래스와 매칭되는지 나타내는 값
- 
  c: 클래스 예측 값
- 
  l: Localization(예측된 박스 위치 정보)
- 
  g: Ground truth(정답 박스)
- 
  α: Localization 가중치 (L_conf 와 L_loc 비율을 조정하는 역할을 합니다)
- 
 ![](https://velog.velcdn.com/images/qkrdbstn24/post/825afcf2-86ea-44ea-b148-eeab5ca8ec7d/image.png)
 예측된 바운딩 박스와 실제 바운딩 박스의 좌표 간의 차이를 계산합니다. 이때 중심 좌표 **(cx, cy)**와 크기 **(w, h)**의 차이를 각각 정규화하고, 이 차이에 대해 Smooth L1 손실을 적용하여 계산합니다.
 
@@ -126,7 +120,6 @@ SSD는 aspect ratio로 1:1, 2:1, 3:1, 1:2, 1:3. 이를 통해 정사각형과 �
 1:1 aspect ratio는 정사각형 모양의 박스를 생성하고, 2:1 또는 1:2와 같은 비율은 직사각형 모양의 박스를 생성합니다.
 
 
-
 ### 4) Hard Negative Mining
 Hard Negative Mining은 양성(positive) 예시와 음성(negative) 예시 간의 불균형을 해결하는 방법입니다.
  위의 Confidence Loss(conf)에서 구한 양성(객체와 일치하는 박스) 음성(객체와 매칭되지 않는 박스(배경))으로 양성대 음성 비율을 1:3 으로 조정해서 불균형을 해결 하였습니다.
@@ -138,3 +131,76 @@ SSD 데이터 증강으로는
 	기준을 0.1, 0.3, 0.5, 0.7, 0.9 중 하나로 설정됩니다. 예를 들어, IoU가 0.5인 패치를 샘플링할 경우, 추출한 패치가 객체와 50% 정도 겹치도록 만듭니다. 이 방식은 모델이 객체를 부분적으로 인식할 수 있도록 도와줍니다.
 - 랜덤 샘플링
 	특정 기준없이 랜덤하게 샘플링
+    
+
+### 추가적인 설명
+
+#### 1) Aspect ratio
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/dbacd609-c3e6-4cb9-8612-1fbd629c837c/image.png" width="200"/>
+
+
+ex) conv4_3 피처 맵:
+- object 스케일은 0.1
+- aspect ratio [1., 2., 0.5]
+ 1 = 정사각형, 2 = 가로가 세로보다 2배긴 직사각형(빨간색 box) 0.5 = 세로가 2배긴 직사각형(파란색 box)
+ 
+각 위치에서 prior box의 크기는 다음과 같이 계산됩니다.
+aspect ratio 1:
+width = 0.1 * sqrt(1) = 0.1
+height = 0.1 / sqrt(1) = 0.1
+
+aspect ratio 2:
+width = 0.1 * sqrt(2) ≈ 0.1414
+height = 0.1 / sqrt(2) ≈ 0.0707
+
+aspect ratio 0.5:
+width = 0.1 * sqrt(0.5) ≈ 0.0707
+height = 0.1 / sqrt(0.5) ≈ 0.1414
+
+
+
+#### 2) Object scale
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/dad76e79-5bd3-4d7e-a1d8-24b188a11990/image.png" width="200"/>
+
+위 그림은 같은 aspect ratio를 가지진만 다른 Scale로  다른 Box 가 나오는 예시
+
+'conv4_3': 0.1
+'conv7': 0.2
+'conv8_2': 0.375
+'conv9_2': 0.55
+'conv10_2': 0.725
+'conv11_2': 0.9
+<img src="https://velog.velcdn.com/images/qkrdbstn24/post/9f320e6b-235a-4810-b2e1-109e190308e3/image.png" width="400"/>
+$m$ : 몇 개의 feature map (con7 ~ conv11_2  5개)
+$s_k$ : scalre of $k^{th}$ layer
+s<sub>min</sub> : 0.2 (단, PASCAL VOC 2007 에서 conv4_3 의 scale 을 0.1 로 setting)
+s<sub>max</sub> : 0.9
+
+
+1. $s_0$ = 0.1 (PASCAL VOC 2007 에서 conv4_3 의 scale 을 0.1 로 setting)
+
+2. $s_1$ = s<sub>min</sub> = 0.2 (k=1 이므로 뒤의항 없어짐)
+
+3. $s_2$ = $s_{\min} + \frac{(s_{\max} - s_{\min})(k - 1)}{m - 1}$ = $0.2 + \frac{(0.9 - 0.2) \cdot (2 - 1)}{5 - 1}$ = $0.2 + 0.7 \cdot \frac{1}{4}$ = 0.375
+
+4. $s_3$ = $s_{\min} + \frac{(s_{\max} - s_{\min}) \cdot (k - 1)}{m - 1}$ = $0.2 + \frac{(0.9 - 0.2) \cdot (3 - 1)}{5 - 1}$= $0.2 + 0.7 \cdot \frac{2}{4}$ = 0.55
+
+5. $s_4$ =$s_{\min} + \frac{(s_{\max} - s_{\min}) \cdot (k - 1)}{m - 1}$ = $0.2 + \frac{(0.9 - 0.2) \cdot (4 - 1)}{5 - 1}$ = $0.2 + 0.7 \cdot \frac{3}{4}$ = 0.725
+
+6. $s_5$ = $s_{\min} + \frac{(s_{\max} - s_{\min}) \cdot (k - 1)}{m - 1}$ = $0.2 + \frac{(0.9 - 0.2) \cdot (5 - 1)}{5 - 1}$ = $0.2 + 0.7 \cdot \frac{4}{4}$ = 0.9
+
+따라서 conv4_3 부터 conv11_2 까지 각 [0.1, 0.2, 0.375, 0.55, 0.725, 0.9] 의 scale 을 갖습니다. 
+
+
+#### 3) Prior box
+각 feature map의 크기와 각 feature map의 n_boxes의 갯수로 Total prior box 계산
+
+n_boxes 갯수 및 feature map 크기
+1. 'conv4_3': 4 (38 x 38) = 38 x 38 x 4 = 5776 -> 작은 객체 탐지
+2. 'conv7': 6 (19 x 19) = 19 x 19 x 6 = 2166 -> 중간 크기 객체 탐지
+3. 'conv8_2': 6 (10 x 10) = 10 x 10 x 6 = 600 -> 중간 크기 객체
+4. 'conv9_2': 6 (5 x 5) = 5 x 5 x 6 = 150 -> 더 큰 객체 탐지
+5. 'conv10_2': 4 (3 x 3) = 3 x 3 x 4 = 36 -> 큰 객체 탐지
+6. 'conv11_2': 4 (1 x 1) = 1 x 1 x 4 = 4 -> 매우 큰 객체 탐지
+Total prior box = 8732
+
