@@ -105,6 +105,18 @@ Class scores output shape: torch.Size([1, 4400, 21])
 | **Mean Average Precision (mAP)** | 57.5  | 59.5  | 70.3  | 70.6  |
 | **Total Prior Boxes**           | 1212  | 6600  | 4400  | 4400  |
 
+
+논문 SSD mAP
+![](https://velog.velcdn.com/images/qkrdbstn24/post/901ea880-0c9c-4671-b3b1-14aa6dbb4101/image.png)
+
+정리
+
+| 모델              | 백본(Backbone)    | 데이터셋        | mAP  |
+|-------------------|-------------------|-----------------|------|
+| SSD300            | VGG16             | Pascal 2007+2012 | 72.4 |
+| SSD(MobileNetV2)  | MobileNetV2        | Pascal 2007+2012 | 70.6 |
+
+
 ## 3) FLOPs
 
 FLOPs 비교:
